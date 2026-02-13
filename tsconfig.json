@@ -1,0 +1,33 @@
+{
+  "include": [
+    "./src/**/*.ts*"
+  ],
+  "exclude": [
+    "node_modules"
+  ],
+  "compilerOptions": {
+    "target": "ES6",
+    "lib": [
+      "ESNext",
+      "DOM"
+    ],
+    "removeComments": true,
+    "sourceMap": true,
+    "importHelpers": true,
+    "baseUrl": ".",
+    "paths": {
+      "@root/*": [
+        "./src/*"
+      ]
+    },
+    "jsxFactory": "m",
+    "jsx": "react",
+    "isolatedModules": true,
+    "esModuleInterop": true,
+    "downlevelIteration": true,
+    "moduleResolution": "Node",
+    "module": "ESNext",
+    "verbatimModuleSyntax": true,
+    "allowSyntheticDefaultImports": true,
+  }
+}

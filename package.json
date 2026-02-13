@@ -1,0 +1,43 @@
+{
+  "name": "starter",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "clean": "node scripts/clean.js",
+    "copy": "node scripts/copy.js",
+    "start": "npm run clean && npm run copy && webpack --mode=development --watch",
+    "build": "npm run clean && npm run copy && webpack --mode=development --env=development",
+    "compile": "npm run clean && npm run copy && webpack --mode=production --env=prod"
+  },
+  "dependencies": {
+    "flubber": "^0.4.2",
+    "mithril": "^2.3.2",
+    "mithril-tsx-component": "^3.0.1"
+  },
+  "devDependencies": {
+    "@types/flubber": "^0.4.0",
+    "@types/mithril": "2.0.6",
+    "autoprefixer": "^10.4.21",
+    "css-loader": "^7.1.2",
+    "file-loader": "^6.2.0",
+    "fork-ts-checker-webpack-plugin": "^9.1.0",
+    "mini-css-extract-plugin": "^2.9.2",
+    "null-loader": "^4.0.1",
+    "postcss-loader": "^8.1.1",
+    "sass": "^1.89.2",
+    "sass-loader": "^16.0.5",
+    "style-loader": "^4.0.0",
+    "ts-loader": "^9.5.2",
+    "tslib": "^2.8.1",
+    "typescript": "^5.8.3",
+    "url-loader": "^4.1.1",
+    "webpack": "^5.99.9",
+    "webpack-bundle-analyzer": "^4.10.2",
+    "webpack-cli": "^6.0.1"
+  },
+  "browserslist": [
+    "defaults",
+    "not dead, ie 11",
+    "last 2 versions"
+  ]
+}

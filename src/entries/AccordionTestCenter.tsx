@@ -19,7 +19,7 @@ class AccordionDemo extends MithrilTsxComponent<{}> {
   }
 
   private accordionData: IAccordion = {
-    header: { title: "Interactive Accordion Demo", heading: "h2" },
+    header: { title: "Accordion title", heading: "h2" },
     items: [
       { title: "First Item", content: "This is the first item content" },
       { title: "Second Item", content: "This is the second item content" },
@@ -34,7 +34,7 @@ class AccordionDemo extends MithrilTsxComponent<{}> {
   view() {
     return (
       <div className="accordion-demo-container">
-        <Header title="Accordion Component Demo" heading="h1" />
+        <Header title="Accordion Test Center" heading="h1" />
         
         <div className="accordion-options">
           <Header title="Options" heading="h3" />
@@ -44,7 +44,7 @@ class AccordionDemo extends MithrilTsxComponent<{}> {
               checked={this.state.openFirstOnLoad}
               onchange={() => this.toggleOption('openFirstOnLoad')}
             />
-            Open First On Load
+            Open first on load
           </label>
           
           <label>
@@ -53,7 +53,7 @@ class AccordionDemo extends MithrilTsxComponent<{}> {
               checked={this.state.canOpenMultiple}
               onchange={() => this.toggleOption('canOpenMultiple')}
             />
-            Can Open Multiple
+            Can open multiple
           </label>
           
           <label>
@@ -62,7 +62,7 @@ class AccordionDemo extends MithrilTsxComponent<{}> {
               checked={this.state.nummerableTitles}
               onchange={() => this.toggleOption('nummerableTitles')}
             />
-            Numbered Titles
+            Numbered titles
           </label>
         </div>
 

@@ -98,11 +98,12 @@ class AccordionItem extends MithrilTsxComponent<IAccordionData> {
   view(v: m.Vnode<IAccordionData>) {
    const { index, title, content, open, nummerableTitle, onClick } = v.attrs
    const icon = open ? "▲" : "▼"
+   const concattedTitle = nummerableTitle ? `${index + 1}. ${title}` : title
 
    return <div className="Accordion-item" key={index}>
             <div className="title" onclick={() => onClick(index)}>
                <span className="icon">{icon}</span>
-               {nummerableTitle ? `${index + 1}. ${title}` : title}
+               {concattedTitle}
             </div>
             {open && <div className="content">{content}</div>}
          </div>

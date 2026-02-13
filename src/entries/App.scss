@@ -1,4 +1,13 @@
-@import url('https://fonts.googleapis.com/css2?family=League+Gothic&display=swap');
+/* Color Variables */
+:root {
+  --color-bg-primary: #32312F;
+  --color-bg-secondary: #2a2a2a;
+  --color-bg-tertiary: #444;
+  --color-bg-tertiary-hover: #555;
+  --color-text-primary: #f1f0f0;
+  --color-text-secondary: white;
+  --color-border: #ccc;
+}
 
 /* Global base styles */
 html,
@@ -7,17 +16,12 @@ body,
   height: 100%;
   margin: 0;
   padding: 0;
-  background-color: #32312F;
-  color: #f1f0f0;
+  background-color: var(--color-bg-primary);
+  color: var(--color-text-primary);
   font-family: Arial, sans-serif;
 }
 
-h1, h2, h3, h4, h5, h6 {
-  font-family: 'League Gothic', sans-serif;
-  letter-spacing: 1px;
-}
-
 a {
-  color: white;
+  color: var(--color-text-secondary);
   text-decoration: underline;
 }

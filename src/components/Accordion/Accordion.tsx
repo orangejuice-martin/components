@@ -96,8 +96,11 @@ interface IAccordionData {
 
 class AccordionItem extends MithrilTsxComponent<IAccordionData> {
   view(v: m.Vnode<IAccordionData>) {
+   //Session: defer it to an object of the specified type? const data: IAccordionData = v.attrs
    const { index, title, content, open, nummerableTitle, onClick } = v.attrs
    const icon = open ? "▲" : "▼"
+
+   //Session do inline manipulation of the title here instead of in the view
    const concattedTitle = nummerableTitle ? `${index + 1}. ${title}` : title
 
    return <div className="Accordion-item" key={index}>

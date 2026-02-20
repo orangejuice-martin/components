@@ -105,8 +105,13 @@ module.exports = (env, argv) => {
         maxInitialRequests: 2,
         cacheGroups: {
           default: false,
-          vendors: false,
-          common: false
+          common: false,
+          vendors: {
+            test: /[\\/]node_modules[\\/]/,
+            name: 'vendors',
+            chunks: 'all',
+            enforce: true
+          }
         },
       },
     },

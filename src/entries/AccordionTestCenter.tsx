@@ -5,17 +5,11 @@ import { MithrilTsxComponent } from "mithril-tsx-component"
 import { Accordion, type IAccordion } from "../components/Accordion/Accordion"
 import { Header } from "../Items/Header/Header"
 
-interface IAccordionDemoState {
-  openFirstOnLoad: boolean
-  canOpenMultiple: boolean
-  nummerableTitles: boolean
-}
-
 class AccordionDemo extends MithrilTsxComponent<{}> {
-  private state: IAccordionDemoState = {
-    openFirstOnLoad: false,
-    canOpenMultiple: false,
-    nummerableTitles: false
+  private options = {
+    openFirstOnLoad: { title: "Open first on load", value: false },
+    canOpenMultiple: { title: "Can open multiple", value: false },
+    nummerableTitles: { title: "Numbered titles", value: false }
   }
 
   private accordionData: IAccordion = {
@@ -27,9 +21,7 @@ class AccordionDemo extends MithrilTsxComponent<{}> {
     ]
   }
 
-  toggleOption(option: keyof IAccordionDemoState) {
-    this.state[option] = !this.state[option]
-  }
+  private _options = Object.values(this.options)
 
   view() {
     return (
@@ -38,39 +30,19 @@ class AccordionDemo extends MithrilTsxComponent<{}> {
         
         <div className="accordion-options">
           <Header title="Options" heading="h3" />
+           {this._options.map(x =>
           <label>
-            <input 
-              type="checkbox" 
-              checked={this.state.openFirstOnLoad}
-              onchange={() => this.toggleOption('openFirstOnLoad')}
-            />
-            Open first on load
+            <input type="checkbox" checked={x.value} onchange={() => x.value = !x.value} />
+            {x.title}
           </label>
-          
-          <label>
-            <input 
-              type="checkbox" 
-              checked={this.state.canOpenMultiple}
-              onchange={() => this.toggleOption('canOpenMultiple')}
-            />
-            Can open multiple
-          </label>
-          
-          <label>
-            <input 
-              type="checkbox" 
-              checked={this.state.nummerableTitles}
-              onchange={() => this.toggleOption('nummerableTitles')}
-            />
-            Numbered titles
-          </label>
+        )}
         </div>
 
         <Accordion 
           {...this.accordionData}
-          openFirstOnLoad={this.state.openFirstOnLoad}
-          canOpenMultiple={this.state.canOpenMultiple}
-          nummerableTitles={this.state.nummerableTitles}
+          openFirstOnLoad={this.options.openFirstOnLoad.value}
+          canOpenMultiple={this.options.canOpenMultiple.value}
+          nummerableTitles={this.options.nummerableTitles.value}
         />
       </div>
     )

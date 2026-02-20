@@ -17,68 +17,51 @@ export interface IAccordionItem {
 }
 
 export class Accordion extends MithrilTsxComponent<IAccordion> {
-   private openItems: Set<number> = new Set()
-   private canOpenMultiple: boolean = false
+   private openItems = new Set<IAccordionItem>()
 
    oninit(v: m.Vnode<IAccordion>) {
       if (v.attrs.openFirstOnLoad) {
-         this.openItems.add(0)
-      }
-      this.canOpenMultiple = v.attrs.canOpenMultiple || false
-   }
-
-   onbeforeupdate(newVnode: m.Vnode<IAccordion>, oldVnode: m.Vnode<IAccordion>) {
-      if (newVnode.attrs.canOpenMultiple !== oldVnode.attrs.canOpenMultiple) {
-         this.canOpenMultiple = newVnode.attrs.canOpenMultiple || false
-         if (!this.canOpenMultiple) {
-            if (this.openItems.size > 1) {
-               const lowestIndex = Math.min(...Array.from(this.openItems))
-               this.openItems.clear()
-               this.openItems.add(lowestIndex)
-            }
-         }
-      }
-      if (newVnode.attrs.openFirstOnLoad !== oldVnode.attrs.openFirstOnLoad) {         
-         if (newVnode.attrs.openFirstOnLoad && this.openItems.has(0) === false) {
-            this.openItems.add(0)
-         }
+         this.openItems.add(v.attrs.items[0])
       }
    }
 
-   handleClick(index: number) {
-      if (this.canOpenMultiple) {
-         if (this.openItems.has(index)) {
-            this.openItems.delete(index)
-         } else {
-            this.openItems.add(index)
-         }
-      } else {
-         if (this.openItems.has(index)) {
-            this.openItems.clear()
-         } else {
-            this.openItems.clear()
-            this.openItems.add(index)
-         }
+   onbeforeupdate(v: m.Vnode<IAccordion>, o: m.Vnode<IAccordion>) {
+      if (!v.attrs.canOpenMultiple && this.openItems.size > 1) {
+         const items = Array.from(this.openItems)
+
+         for (let i = 1; i < items.length; i++)
+            this.openItems.delete(items[i])
       }
+
+      if (v.attrs.openFirstOnLoad && !o.attrs.openFirstOnLoad && this.openItems.size === 0)
+         this.openItems.add(v.attrs.items[0])
+   }
+
+   handleClick(v: m.Vnode<IAccordion>, item: IAccordionItem, index: number) {
+      if (this.openItems.has(item))
+         return this.openItems.delete(item)
+
+      if (!v.attrs.canOpenMultiple)
+         this.openItems.clear()
+
+      this.openItems.add(item)
    }
 
    view(v: m.Vnode<IAccordion>) {
-      const {nummerableTitles, header, items } = v.attrs
-
-      if (!items || items.length === 0) {
+      if (!v.attrs.items || v.attrs.items.length === 0) {
          return null
       }
 
       return <div className="Accordion">
-         {header && <Header title={header.title} heading={header.heading} />}
-         {items.map((item, index) => 
+         {v.attrs.header && <Header title={v.attrs.header.title} heading={v.attrs.header.heading} />}
+         {v.attrs.items.map((item, index) => 
             <AccordionItem 
                index={index} 
                title={item.title} 
                content={item.content}
-               open={this.openItems.has(index)}
-               nummerableTitle={nummerableTitles || false}
-               onClick={() => this.handleClick(index)}
+               open={this.openItems.has(item)}
+               nummerableTitle={v.attrs.nummerableTitles}
+               onClick={() => this.handleClick(v, item, index)}
             />
          )}
       </div>
@@ -90,25 +73,18 @@ interface IAccordionData {
    title: string
    content: m.Children
    open: boolean,
-   nummerableTitle: boolean,
+   nummerableTitle?: boolean,
    onClick: (index: number) => void
 }
 
 class AccordionItem extends MithrilTsxComponent<IAccordionData> {
-  view(v: m.Vnode<IAccordionData>) {
-   //Session: defer it to an object of the specified type? const data: IAccordionData = v.attrs
-   const { index, title, content, open, nummerableTitle, onClick } = v.attrs
-   const icon = open ? "▲" : "▼"
-
-   //Session do inline manipulation of the title here instead of in the view
-   const concattedTitle = nummerableTitle ? `${index + 1}. ${title}` : title
-
-   return <div className="Accordion-item" key={index}>
-            <div className="title" onclick={() => onClick(index)}>
-               <span className="icon">{icon}</span>
-               {concattedTitle}
-            </div>
-            {open && <div className="content">{content}</div>}
+   view(v: m.Vnode<IAccordionData>) {
+      return <div className={"Accordion-item" + (v.attrs.open ? " -open" : "")} key={v.attrs.index}>
+         <div className="title" onclick={() => v.attrs.onClick(v.attrs.index)}>
+            <span className="icon">▼</span>
+            {v.attrs.nummerableTitle && `${v.attrs.index + 1}.`} {v.attrs.title}
          </div>
+         {open && <div className="content">{v.attrs.content}</div>}
+      </div>
   }
 }

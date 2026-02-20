@@ -19,6 +19,7 @@
       .icon {
         margin-right: 10px;
         font-size: 0.8em;
+        transition: transform 0.3s ease;
       }
       
       &:hover {
@@ -30,6 +31,14 @@
       padding: 15px;
       background-color: var(--color-bg-secondary);
       color: var(--color-text-primary);
+    }
+
+    &.-open {
+      .title {
+        .icon {
+          transform: scaleY(-1);
+        }
+      }
     }
   }
 }

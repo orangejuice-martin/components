@@ -5,7 +5,7 @@ import { MithrilTsxComponent } from "mithril-tsx-component"
 import { Accordion, type IAccordion } from "../components/Accordion/Accordion"
 import { Header } from "../Items/Header/Header"
 
-class AccordionDemo extends MithrilTsxComponent<{}> {
+export class AccordionDemo extends MithrilTsxComponent<{}> {
   private options = {
     openFirstOnLoad: { title: "Open first on load", value: false },
     canOpenMultiple: { title: "Can open multiple", value: false },
@@ -47,11 +47,4 @@ class AccordionDemo extends MithrilTsxComponent<{}> {
       </div>
     )
   }
-}
-
-const app = document.getElementById("accordion-demo")
-if (app) {
-  m.mount(app, {
-    view: () => <AccordionDemo />
-  })
 }

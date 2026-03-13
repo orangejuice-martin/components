@@ -29,8 +29,6 @@ export class Typewriter extends MithrilTsxComponent<ITypewriter> {
         ) {
             this.start(v.attrs)
         }
-
-        return true
     }
 
     onremove() {

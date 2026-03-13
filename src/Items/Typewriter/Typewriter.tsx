@@ -39,13 +39,13 @@ export class Typewriter extends MithrilTsxComponent<ITypewriter> {
 
     private start(attrs: ITypewriter) {
         this.stop()
-        this.lineIndex = 0
-        this.characterIndex = 0
 
         if (!attrs.title?.length) {
             return
         }
 
+        this.lineIndex = 0
+        this.characterIndex = 0
         this.controller = new AbortController()
         this.typeForward(attrs, this.controller.signal)
     }
@@ -60,7 +60,7 @@ export class Typewriter extends MithrilTsxComponent<ITypewriter> {
         }
     }
 
-    private schedule(delayMs: number, signal: AbortSignal, next: () => void) {
+    private schedule(next: () => void, delayMs: number, signal: AbortSignal) {
         if (signal.aborted) {
             return
         }
@@ -79,7 +79,7 @@ export class Typewriter extends MithrilTsxComponent<ITypewriter> {
         if (this.characterIndex < line.length) {
             this.characterIndex++
             m.redraw()
-            this.schedule(this.getForwardCharacterDelay(attrs), signal, () => this.typeForward(attrs, signal))
+            this.schedule(() => this.typeForward(attrs, signal), this.getForwardCharacterDelay(attrs), signal)
             return
         }
 
@@ -88,14 +88,14 @@ export class Typewriter extends MithrilTsxComponent<ITypewriter> {
             return
         }
 
-        this.schedule(this.getLineDelay(attrs), signal, () => this.typeBackward(attrs, signal))
+        this.schedule(() => this.typeBackward(attrs, signal), this.getLineDelay(attrs), signal)
     }
 
     private typeBackward(attrs: ITypewriter, signal: AbortSignal) {
         if (this.characterIndex > 0) {
             this.characterIndex--
             m.redraw()
-            this.schedule(this.getBackwardCharacterDelay(attrs), signal, () => this.typeBackward(attrs, signal))
+            this.schedule(() => this.typeBackward(attrs, signal), this.getBackwardCharacterDelay(attrs), signal)
             return
         }
 

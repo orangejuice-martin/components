@@ -1,6 +1,6 @@
 import m from "mithril"
-import "./Header.scss"
 import { MithrilTsxComponent } from "mithril-tsx-component"
+import "./Header.scss"
 
 export interface IHeader {
    title: string,
@@ -8,11 +8,9 @@ export interface IHeader {
 }
 
 export class Header extends MithrilTsxComponent<IHeader> {
-   
-   view(v: m.Vnode<IHeader>) {
-      const { title, heading } = v.attrs
 
-      return m(heading, title)
+   view(v: m.Vnode<IHeader>) {
+      return m(v.attrs.heading, v.attrs.title)
    }
 
 }

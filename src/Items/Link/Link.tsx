@@ -1,6 +1,6 @@
 import m from "mithril"
-import "./Link.scss"
 import { MithrilTsxComponent } from "mithril-tsx-component"
+import "./Link.scss"
 
 export interface ILink {
    url: string,
@@ -12,9 +12,7 @@ export interface ILink {
 export class Link extends MithrilTsxComponent<ILink> {
    
    view(v: m.Vnode<ILink>) {
-      const { url, title, className, target } = v.attrs
-
-      return <a href={`${url}`} target={`${target}`} className={`${className}`}>{title}</a>
+      return <a href={`${v.attrs.url}`} target={`${v.attrs.target}`} className={`${v.attrs.className}`}>{v.attrs.title}</a>
    }
 
 }

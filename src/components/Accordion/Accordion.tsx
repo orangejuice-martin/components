@@ -1,6 +1,6 @@
 import m from "mithril"
-import "./Accordion.scss"
 import { MithrilTsxComponent } from "mithril-tsx-component"
+import "./Accordion.scss"
 import { Header, type IHeader } from "../../Items/Header/Header"
 
 export interface IAccordion {
@@ -37,7 +37,7 @@ export class Accordion extends MithrilTsxComponent<IAccordion> {
          this.openItems.add(v.attrs.items[0])
    }
 
-   handleClick(v: m.Vnode<IAccordion>, item: IAccordionItem, index: number) {
+   handleClick(v: m.Vnode<IAccordion>, item: IAccordionItem) {
       if (this.openItems.has(item))
          return this.openItems.delete(item)
 
@@ -49,19 +49,19 @@ export class Accordion extends MithrilTsxComponent<IAccordion> {
 
    view(v: m.Vnode<IAccordion>) {
       if (!v.attrs.items || v.attrs.items.length === 0) {
-         return null
+         return
       }
 
       return <div className="Accordion">
          {v.attrs.header && <Header title={v.attrs.header.title} heading={v.attrs.header.heading} />}
-         {v.attrs.items.map((item, index) => 
-            <AccordionItem 
-               index={index} 
-               title={item.title} 
+         {v.attrs.items.map((item, index) =>
+            <AccordionItem
+               index={index}
+               title={item.title}
                content={item.content}
                open={this.openItems.has(item)}
                nummerableTitle={v.attrs.nummerableTitles}
-               onClick={() => this.handleClick(v, item, index)}
+               onClick={() => this.handleClick(v, item)}
             />
          )}
       </div>
@@ -86,5 +86,5 @@ class AccordionItem extends MithrilTsxComponent<IAccordionData> {
          </div>
          {open && <div className="content">{v.attrs.content}</div>}
       </div>
-  }
+   }
 }

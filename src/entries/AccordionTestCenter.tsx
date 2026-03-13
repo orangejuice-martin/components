@@ -1,7 +1,7 @@
 import m from "mithril"
+import { MithrilTsxComponent } from "mithril-tsx-component"
 import "./App.scss"
 import "./AccordionTestCenter.scss"
-import { MithrilTsxComponent } from "mithril-tsx-component"
 import { Accordion, type IAccordion } from "../components/Accordion/Accordion"
 import { Header } from "../Items/Header/Header"
 
@@ -27,18 +27,18 @@ export class AccordionDemo extends MithrilTsxComponent<{}> {
     return (
       <div className="accordion-demo-container">
         <Header title="Accordion Test Center" heading="h1" />
-        
+
         <div className="accordion-options">
           <Header title="Options" heading="h3" />
-           {this._options.map(x =>
-          <label>
-            <input type="checkbox" checked={x.value} onchange={() => x.value = !x.value} />
-            {x.title}
-          </label>
-        )}
+          {this._options.map(x =>
+            <label>
+              <input type="checkbox" checked={x.value} onchange={() => x.value = !x.value} />
+              {x.title}
+            </label>
+          )}
         </div>
 
-        <Accordion 
+        <Accordion
           {...this.accordionData}
           openFirstOnLoad={this.options.openFirstOnLoad.value}
           canOpenMultiple={this.options.canOpenMultiple.value}

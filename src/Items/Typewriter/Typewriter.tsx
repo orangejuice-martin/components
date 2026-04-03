@@ -2,8 +2,11 @@ import m from "mithril"
 import { MithrilTsxComponent } from "mithril-tsx-component"
 import "./Typewriter.scss"
 
+const pause = (ms: number) =>
+    new Promise(r => setTimeout(r, ms))
+
 export interface ITypewriter {
-    title: string[],
+    lines: string[],
     forwardCharacterDelayInSeconds?: number,
     backwardCharacterDelayInSeconds?: number,
     lineDelayInSeconds?: number,
@@ -11,17 +14,16 @@ export interface ITypewriter {
 }
 
 export class Typewriter extends MithrilTsxComponent<ITypewriter> {
-    private lineIndex: number = 0
-    private characterIndex: number = 0
-    private timerId: number | undefined
-    private controller: AbortController | undefined
+    private abortController: AbortController | undefined
+    private root: HTMLElement | undefined
 
-    oninit(v: m.Vnode<ITypewriter>) {
+    oncreate(v: m.VnodeDOM<ITypewriter>) {
+        this.root = v.dom as HTMLElement
         this.start(v.attrs)
     }
 
     onbeforeupdate(v: m.Vnode<ITypewriter>, o: m.Vnode<ITypewriter>) {
-        if (!this.sameLines(v.attrs.title, o.attrs.title) ||
+        if (!this.sameLines(v.attrs.lines, o.attrs.lines) ||
             v.attrs.forwardCharacterDelayInSeconds !== o.attrs.forwardCharacterDelayInSeconds ||
             v.attrs.backwardCharacterDelayInSeconds !== o.attrs.backwardCharacterDelayInSeconds ||
             v.attrs.lineDelayInSeconds !== o.attrs.lineDelayInSeconds ||
@@ -38,69 +40,59 @@ export class Typewriter extends MithrilTsxComponent<ITypewriter> {
     private start(attrs: ITypewriter) {
         this.stop()
 
-        if (!attrs.title?.length) {
+        if (!attrs.lines?.length) {
             return
         }
 
-        this.lineIndex = 0
-        this.characterIndex = 0
-        this.controller = new AbortController()
-        this.typeForward(attrs, this.controller.signal)
+        this.abortController = new AbortController()
+        this.write(attrs, this.abortController.signal)
     }
 
     private stop() {
-        this.controller?.abort()
-        this.controller = undefined
-
-        if (this.timerId !== undefined) {
-            window.clearTimeout(this.timerId)
-            this.timerId = undefined
-        }
+        this.abortController?.abort()
+        delete this.abortController
     }
 
-    private schedule(next: () => void, delayMs: number, signal: AbortSignal) {
-        if (signal.aborted) {
-            return
-        }
+    private async write(attrs: ITypewriter, abortSignal: AbortSignal){
+        const forwardCharacterDelay = this.getForwardCharacterDelay(attrs)
+        const backwardCharacterDelay = this.getBackwardCharacterDelay(attrs)
+        const lineDelay = this.getLineDelay(attrs)
 
-        this.timerId = window.setTimeout(() => {
-            if (signal.aborted) {
-                return
+        while (true) {
+            console.log("Starting typewriter loop")
+
+            for (let lineNumber = 0; lineNumber < attrs.lines.length; lineNumber++) {
+
+                console.log("line", lineNumber)
+
+                const line = attrs.lines[lineNumber]
+
+                let characterIndex = 0
+
+                for (; characterIndex < line.length; characterIndex++) {
+                    if (abortSignal.aborted)
+                        return
+
+                    const text = line.slice(0, characterIndex +1)
+                    if (this.root) this.root.textContent = text
+                    await pause(forwardCharacterDelay)
+                }
+
+                if (!attrs.circular && lineNumber === attrs.lines.length - 1)
+                    return
+
+                await pause(lineDelay)
+
+                for (; characterIndex > 0; characterIndex--) {
+                    if (abortSignal.aborted)
+                        return
+
+                    const text = line.slice(0, characterIndex + 1)
+                    if (this.root) this.root.textContent = text
+                    await pause(backwardCharacterDelay)
+                }
             }
-            next()
-        }, delayMs)
-    }
-
-    private typeForward(attrs: ITypewriter, signal: AbortSignal) {
-        const line = attrs.title[this.lineIndex] ?? ""
-
-        if (this.characterIndex < line.length) {
-            this.characterIndex++
-            m.redraw()
-            this.schedule(() => this.typeForward(attrs, signal), this.getForwardCharacterDelay(attrs), signal)
-            return
         }
-
-        const isLastLine = this.lineIndex >= attrs.title.length - 1
-        if (isLastLine && !attrs.circular) {
-            return
-        }
-
-        this.schedule(() => this.typeBackward(attrs, signal), this.getLineDelay(attrs), signal)
-    }
-
-    private typeBackward(attrs: ITypewriter, signal: AbortSignal) {
-        if (this.characterIndex > 0) {
-            this.characterIndex--
-            m.redraw()
-            this.schedule(() => this.typeBackward(attrs, signal), this.getBackwardCharacterDelay(attrs), signal)
-            return
-        }
-
-        const isLastLine = this.lineIndex >= attrs.title.length - 1
-        this.lineIndex = isLastLine ? 0 : this.lineIndex + 1
-
-        this.typeForward(attrs, signal)
     }
 
     private getLineDelay(attrs: ITypewriter, defaultDelayInSeconds: number = 2) {
@@ -124,10 +116,7 @@ export class Typewriter extends MithrilTsxComponent<ITypewriter> {
     }
 
     view(v: m.Vnode<ITypewriter>) {
-        const line = v.attrs.title?.[this.lineIndex] ?? ""
-        const text = line.slice(0, this.characterIndex)
-
-        return <div className="Typewriter">{text}</div>
+        return <div className="Typewriter" />
     }
 
 }

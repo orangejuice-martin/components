@@ -84,7 +84,7 @@ class AccordionItem extends MithrilTsxComponent<IAccordionData> {
             <span className="icon">▼</span>
             {v.attrs.nummerableTitle && `${v.attrs.index + 1}.`} {v.attrs.title}
          </div>
-         {open && <div className="content">{v.attrs.content}</div>}
+         {v.attrs.open && <div className="content">{v.attrs.content}</div>}
       </div>
    }
 }

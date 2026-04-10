@@ -14,6 +14,19 @@ class App extends MithrilTsxComponent<{}> {
       <div className="app-container">
         <h1>Components Test Center</h1>
         <span><Typewriter lines={this.lines} /></span>
+        <ul>
+          <li>
+            <a
+              href="/accordion"
+              onclick={(e: any) => {
+                e.preventDefault()
+                m.route.set("/accordion")
+              }}
+            >
+              Accordion
+            </a>
+          </li>
+        </ul>
       </div>
     )
   }
@@ -21,6 +34,8 @@ class App extends MithrilTsxComponent<{}> {
 
 const app = document.getElementById("app")
 if (app) {
+  m.route.prefix = ""
+
   m.route(app, "/", {
     "/": {
       view: () => <App />

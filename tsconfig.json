@@ -6,7 +6,6 @@
     "node_modules"
   ],
   "compilerOptions": {
-    "ignoreDeprecations": "6.0",
     "target": "ES6",
     "lib": [
       "ESNext",
@@ -15,7 +14,6 @@
     "removeComments": true,
     "sourceMap": true,
     "importHelpers": true,
-    "baseUrl": ".",
     "paths": {
       "@root/*": [
         "./src/*"
@@ -25,8 +23,7 @@
     "jsx": "react",
     "isolatedModules": true,
     "esModuleInterop": true,
-    "downlevelIteration": true,
-    "moduleResolution": "Node",
+    "moduleResolution": "Bundler",
     "module": "ESNext",
     "verbatimModuleSyntax": true,
     "allowSyntheticDefaultImports": true,

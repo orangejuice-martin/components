@@ -26,6 +26,17 @@ export class AccordionDemo extends MithrilTsxComponent<{}> {
   view() {
     return (
       <div className="accordion-demo-container">
+        <p>
+          <a
+            href="/"
+            onclick={(e: any) => {
+              e.preventDefault()
+              m.route.set("/")
+            }}
+          >
+            ← Back to Home
+          </a>
+        </p>
         <Header title="Accordion Test Center" heading="h1" />
 
         <div className="accordion-options">

@@ -1,14 +1,21 @@
 import m from "mithril"
 import { MithrilTsxComponent } from "mithril-tsx-component"
-import { AccordionDemo } from "./AccordionTestCenter"
+import { AccordionTestCenter } from "./AccordionTestCenter"
+import { CarouselTestCenter } from "./CarouselTestCenter"
 import "./App.scss"
 import { Typewriter } from "@root/Items/Typewriter/Typewriter"
 import { Header } from "../Items/Header/Header"
 
 class App extends MithrilTsxComponent<{}> {
+  private readonly links = [
+    { label: "Accordion", url: "/accordion" },
+    { label: "Carousel", url: "/carousel" }
+  ]
+
   private readonly lines = ["Hello friend...",
-                                "Welcome to the Components Test Center where you can explore various UI components!", 
-                                "Select a UI component from the menu to see it in action, happy testing!"]
+                            "Welcome to the Components Test Center!", 
+                            "Select a component to see it in action.",
+                            "Happy testing!"]
 
   view() {
     return (
@@ -17,17 +24,19 @@ class App extends MithrilTsxComponent<{}> {
         <div className="app-content">
           <span><Typewriter lines={this.lines} /></span>
           <ul>
-            <li>
-              <a
-                href="/accordion"
-                onclick={(e: any) => {
-                  e.preventDefault()
-                  m.route.set("/accordion")
-                }}
-              >
-                Accordion
-              </a>
-            </li>
+            {this.links.map((link) => (
+              <li>
+                <a
+                  href={link.url}
+                  onclick={(e: any) => {
+                    e.preventDefault()
+                    m.route.set(link.url)
+                  }}
+                >
+                  {link.label}
+                </a>
+              </li>
+            ))}
           </ul>
         </div>
       </div>
@@ -44,7 +53,10 @@ if (app) {
       view: () => <App />
     },
     "/accordion": {
-      view: () => <AccordionDemo />
+      view: () => <AccordionTestCenter />
+    },
+    "/carousel": {
+      view: () => <CarouselTestCenter />
     }
   })
 }

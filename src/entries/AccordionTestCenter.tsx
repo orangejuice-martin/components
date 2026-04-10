@@ -5,7 +5,7 @@ import "./AccordionTestCenter.scss"
 import { Accordion, type IAccordion } from "../components/Accordion/Accordion"
 import { Header } from "../Items/Header/Header"
 
-export class AccordionDemo extends MithrilTsxComponent<{}> {
+export class AccordionTestCenter extends MithrilTsxComponent<{}> {
   private options = {
     openFirstOnLoad: { title: "Open first on load", value: false },
     canOpenMultiple: { title: "Can open multiple", value: false },

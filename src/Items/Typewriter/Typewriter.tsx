@@ -59,11 +59,7 @@ export class Typewriter extends MithrilTsxComponent<ITypewriter> {
         const lineDelay = this.getLineDelay(attrs)
 
         while (true) {
-            console.log("Starting typewriter loop")
-
             for (let lineNumber = 0; lineNumber < attrs.lines.length; lineNumber++) {
-
-                console.log("line", lineNumber)
 
                 const line = attrs.lines[lineNumber]
 

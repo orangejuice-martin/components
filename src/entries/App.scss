@@ -40,6 +40,10 @@ a {
   text-align: left;
 }
 
+.app-container h1 {
+  margin-bottom: 0;
+}
+
 .app-content {
   background-color: var(--color-bg-tertiary);
   border-radius: 8px;

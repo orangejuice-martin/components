@@ -9,7 +9,6 @@ const copyRecursive = (s, t) => {
     .forEach(([source, target]) => {
       if (Fs.statSync(source).isDirectory()) {
         if (!Fs.existsSync(target)) {
-          console.log(target)
           Fs.mkdirSync(target)
         }
         copyRecursive(source, target)

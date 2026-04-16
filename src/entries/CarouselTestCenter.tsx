@@ -4,19 +4,10 @@ import "./App.scss"
 import "./CarouselTestCenter.scss"
 import { Carousel, type ICarousel } from "../components/Carousel/Carousel"
 import { Header } from "../Items/Header/Header"
-
-type Option = {
-  title: string
-  value: boolean | number
-}
-
-type CarouselOptions = {
-  circular: { title: string; value: boolean }
-  itemsVisible: { title: string; value: number }
-}
+import { Options, type OptionDefinition } from "../components/Options/Options"
 
 export class CarouselTestCenter extends MithrilTsxComponent<{}> {
-  private options: CarouselOptions = {
+  private options: Record<string, OptionDefinition> = {
     circular: { title: "Navigate circular", value: false },
     itemsVisible: { title: "Items visible", value: 2 },
   }
@@ -30,7 +21,7 @@ export class CarouselTestCenter extends MithrilTsxComponent<{}> {
       ]
     }
 
-  private _options: Option[] = Object.values(this.options)
+  private _options = Object.values(this.options)
 
   view() {
     return (
@@ -48,27 +39,17 @@ export class CarouselTestCenter extends MithrilTsxComponent<{}> {
         </p>
         <Header title="Carousel Test Center" heading="h1" />
 
-        <div className="carousel-options">
-          <Header title="Options" heading="h3" />
-          {this._options.map(x =>
-            <label>
-              {typeof x.value === "number"
-                ? <input
-                    type="number"
-                    min={1}
-                    value={x.value}
-                    oninput={(e: any) => x.value = Math.max(1, Number(e.target.value) || 1)}
-                  />
-                : <input type="checkbox" checked={x.value} onchange={() => x.value = !x.value} />}
-              {x.title}
-            </label>
-          )}
-        </div>
+        <Options
+          options={this.options}
+          onChange={(key, value) => {
+            this.options[key].value = value
+          }}
+        />
 
         <Carousel
           {...this.carouselData}
-          circular={this.options.circular.value}
-          itemsVisible={this.options.itemsVisible.value}
+          circular={this.options.circular.value as boolean}
+          itemsVisible={this.options.itemsVisible.value as number}
         />
       </div>
     )

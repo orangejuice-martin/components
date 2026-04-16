@@ -4,9 +4,10 @@ import "./App.scss"
 import "./AccordionTestCenter.scss"
 import { Accordion, type IAccordion } from "../components/Accordion/Accordion"
 import { Header } from "../Items/Header/Header"
+import { Options, type OptionDefinition } from "../components/Options/Options"
 
 export class AccordionTestCenter extends MithrilTsxComponent<{}> {
-  private options = {
+  private options: Record<string, OptionDefinition> = {
     openFirstOnLoad: { title: "Open first on load", value: false },
     canOpenMultiple: { title: "Can open multiple", value: false },
     nummerableTitles: { title: "Numbered titles", value: false }
@@ -39,21 +40,18 @@ export class AccordionTestCenter extends MithrilTsxComponent<{}> {
         </p>
         <Header title="Accordion Test Center" heading="h1" />
 
-        <div className="accordion-options">
-          <Header title="Options" heading="h3" />
-          {this._options.map(x =>
-            <label>
-              <input type="checkbox" checked={x.value} onchange={() => x.value = !x.value} />
-              {x.title}
-            </label>
-          )}
-        </div>
+        <Options
+          options={this.options}
+          onChange={(key, value) => {
+            this.options[key].value = value
+          }}
+        />
 
         <Accordion
           {...this.accordionData}
-          openFirstOnLoad={this.options.openFirstOnLoad.value}
-          canOpenMultiple={this.options.canOpenMultiple.value}
-          nummerableTitles={this.options.nummerableTitles.value}
+          openFirstOnLoad={this.options.openFirstOnLoad.value as boolean}
+          canOpenMultiple={this.options.canOpenMultiple.value as boolean}
+          nummerableTitles={this.options.nummerableTitles.value as boolean}
         />
       </div>
     )

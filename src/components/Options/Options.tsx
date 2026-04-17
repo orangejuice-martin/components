@@ -20,7 +20,7 @@ export class Options extends MithrilTsxComponent<IOptions> {
 
     return (
       <div className="options-panel">
-        <Header title="Options" heading="h3" />
+        <Header title="Options" heading="h2" />
         {entries.map(([key, option]) => (
           <label>
             {typeof option.value === "number"

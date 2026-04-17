@@ -3,7 +3,7 @@ import { MithrilTsxComponent } from "mithril-tsx-component"
 import "./App.scss"
 import "./AccordionTestCenter.scss"
 import { Accordion, type IAccordion } from "../components/Accordion/Accordion"
-import { Header } from "../Items/Header/Header"
+import { Header } from "../items/Header/Header"
 import { Options, type OptionDefinition } from "../components/Options/Options"
 
 export class AccordionTestCenter extends MithrilTsxComponent<{}> {

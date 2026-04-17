@@ -1,7 +1,7 @@
 import m from "mithril"
 import { MithrilTsxComponent } from "mithril-tsx-component"
 import "./Accordion.scss"
-import { Header, type IHeader } from "../../Items/Header/Header"
+import { Header, type IHeader } from "../../items/Header/Header"
 
 export interface IAccordion {
    canOpenMultiple?: boolean

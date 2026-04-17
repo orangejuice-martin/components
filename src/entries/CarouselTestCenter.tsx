@@ -3,7 +3,7 @@ import { MithrilTsxComponent } from "mithril-tsx-component"
 import "./App.scss"
 import "./CarouselTestCenter.scss"
 import { Carousel, type ICarousel } from "../components/Carousel/Carousel"
-import { Header } from "../Items/Header/Header"
+import { Header } from "../items/Header/Header"
 import { Options, type OptionDefinition } from "../components/Options/Options"
 
 export class CarouselTestCenter extends MithrilTsxComponent<{}> {

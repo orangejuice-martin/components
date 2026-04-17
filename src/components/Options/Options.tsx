@@ -29,8 +29,7 @@ export class Options extends MithrilTsxComponent<IOptions> {
                   min={1}
                   value={option.value}
                   oninput={(e: any) => {
-                    const nextValue = Math.max(1, Number(e.target.value) || 1)
-                    onChange(key, nextValue)
+                    onChange(key, Math.max(1, Number(e.target.value) || 1))
                   }}
                 />
               : <input

@@ -21,8 +21,6 @@ export class CarouselTestCenter extends MithrilTsxComponent<{}> {
       ]
     }
 
-  private _options = Object.values(this.options)
-
   view() {
     return (
       <div className="carousel-demo-container">

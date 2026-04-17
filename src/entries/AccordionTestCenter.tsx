@@ -22,8 +22,6 @@ export class AccordionTestCenter extends MithrilTsxComponent<{}> {
     ]
   }
 
-  private _options = Object.values(this.options)
-
   view() {
     return (
       <div className="accordion-demo-container">

@@ -3,8 +3,8 @@ import { MithrilTsxComponent } from "mithril-tsx-component"
 import { AccordionTestCenter } from "./AccordionTestCenter"
 import { CarouselTestCenter } from "./CarouselTestCenter"
 import "./App.scss"
-import { Typewriter } from "@root/items/Typewriter/Typewriter"
-import { Header } from "../items/Header/Header"
+import { Typewriter } from "@root/items/typewriter/Typewriter"
+import { Header } from "../items/header/Header"
 
 class App extends MithrilTsxComponent<{}> {
   private readonly links = [

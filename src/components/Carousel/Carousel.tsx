@@ -1,7 +1,7 @@
 import m from "mithril"
 import { MithrilTsxComponent } from "mithril-tsx-component"
 import "./Carousel.scss"
-import { Header, type IHeader } from "../../items/Header/Header"
+import { Header, type IHeader } from "../../items/header/Header"
 
 export interface ICarousel {
     header?: IHeader

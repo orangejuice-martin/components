@@ -1,6 +1,6 @@
 import m from "mithril"
 import { MithrilTsxComponent } from "mithril-tsx-component"
-import { Header } from "../../items/Header/Header"
+import { Header } from "../../items/header/Header"
 import "./Options.scss"
 
 export interface OptionDefinition {

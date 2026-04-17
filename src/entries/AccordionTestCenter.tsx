@@ -2,9 +2,9 @@ import m from "mithril"
 import { MithrilTsxComponent } from "mithril-tsx-component"
 import "./App.scss"
 import "./AccordionTestCenter.scss"
-import { Accordion, type IAccordion } from "../components/Accordion/Accordion"
-import { Header } from "../items/Header/Header"
-import { Options, type OptionDefinition } from "../components/Options/Options"
+import { Accordion, type IAccordion } from "../components/accordion/Accordion"
+import { Header } from "../items/header/Header"
+import { Options, type OptionDefinition } from "../components/options/Options"
 
 export class AccordionTestCenter extends MithrilTsxComponent<{}> {
   private options: Record<string, OptionDefinition> = {

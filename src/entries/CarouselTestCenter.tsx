@@ -2,9 +2,9 @@ import m from "mithril"
 import { MithrilTsxComponent } from "mithril-tsx-component"
 import "./App.scss"
 import "./CarouselTestCenter.scss"
-import { Carousel, type ICarousel } from "../components/Carousel/Carousel"
-import { Header } from "../items/Header/Header"
-import { Options, type OptionDefinition } from "../components/Options/Options"
+import { Carousel, type ICarousel } from "../components/carousel/Carousel"
+import { Header } from "../items/header/Header"
+import { Options, type OptionDefinition } from "../components/options/Options"
 
 export class CarouselTestCenter extends MithrilTsxComponent<{}> {
   private options: Record<string, OptionDefinition> = {

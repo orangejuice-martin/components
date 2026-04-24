@@ -20,14 +20,20 @@ export interface ICarouselItem {
 
 export class Carousel extends MithrilTsxComponent<ICarousel> {
     private currentIndex: number = 0
+    private visibleItems: ICarouselItem[] = []
+
+    oninit(v: m.Vnode<ICarousel>) {
+        this.visibleItems = this.computeVisibleItems(v.attrs)
+    }
 
     onbeforeupdate(v: m.Vnode<ICarousel>) {
-        if (!v.attrs.items || v.attrs.items.length === 0) {
+        const length = v.attrs.items?.length ?? 0
+        if (length === 0) {
             this.currentIndex = 0
+        } else if (length - 1 < this.currentIndex) {
+            this.currentIndex = length - 1
         }
-        else if (v.attrs.items.length - 1 < this.currentIndex) {
-            this.currentIndex = v.attrs.items.length - 1;
-        }
+        this.visibleItems = this.computeVisibleItems(v.attrs)
     }
 
     view(v: m.Vnode<ICarousel>) {
@@ -35,22 +41,20 @@ export class Carousel extends MithrilTsxComponent<ICarousel> {
             return
         }
 
-        const itemsVisible = Math.min(Math.max(v.attrs.itemsVisible ?? 2, 1), v.attrs.items.length)
-
-        const items = this.getVisibleItems(v, itemsVisible);
-
-        const showNavigation = v.attrs.items.length > itemsVisible
+        const length = v.attrs.items.length
+        const itemsVisible = Math.min(Math.max(v.attrs.itemsVisible ?? 2, 1), length)
+        const showNavigation = length > itemsVisible
         const disablePrevious = showNavigation && !v.attrs.circular && this.currentIndex === 0
-        const disableNext = showNavigation && !v.attrs.circular && this.currentIndex >= v.attrs.items.length - itemsVisible
+        const disableNext = showNavigation && !v.attrs.circular && this.currentIndex >= length - itemsVisible
 
         return <div className="Carousel">
             {v.attrs.header && <Header title={v.attrs.header.title} heading={v.attrs.header.heading} />}
             <div className="Carousel-nav">
                 {showNavigation &&
-                    <button className="Carousel-prev" onclick={() => this.currentIndex = (this.currentIndex - 1 + v.attrs.items.length) % v.attrs.items.length} disabled={disablePrevious}>&lt;</button>
+                    <button className="Carousel-prev" onclick={() => this.navigate(-1, v.attrs)} disabled={disablePrevious}>&lt;</button>
                 }
                 <div className="Carousel-items">
-                    {items.map((item) =>
+                    {this.visibleItems.map((item) =>
                         <CarouselItem
                             key={item[$key] ??= crypto.randomUUID()}
                             title={item.title}
@@ -63,24 +67,33 @@ export class Carousel extends MithrilTsxComponent<ICarousel> {
                     )}
                 </div>
                 {showNavigation &&
-                    <button className="Carousel-next" onclick={() => this.currentIndex = (this.currentIndex + 1) % v.attrs.items.length} disabled={disableNext}>&gt;</button>
+                    <button className="Carousel-next" onclick={() => this.navigate(1, v.attrs)} disabled={disableNext}>&gt;</button>
                 }
             </div>
         </div>
     }
 
-    private getVisibleItems(v: m.Vnode<ICarousel>, itemsVisible: number): ICarouselItem[] {
-        if (v.attrs.circular && this.currentIndex + itemsVisible > v.attrs.items.length) {
-            const tail = v.attrs.items.slice(this.currentIndex)
-            const head = v.attrs.items.slice(0, itemsVisible - tail.length)
+    private navigate(delta: number, attrs: ICarousel) {
+        const length = attrs.items.length
+        this.currentIndex = (this.currentIndex + delta + length) % length
+        this.visibleItems = this.computeVisibleItems(attrs)
+    }
+
+    private computeVisibleItems(attrs: ICarousel): ICarouselItem[] {
+        if (!attrs.items?.length) return []
+        const itemsVisible = Math.min(Math.max(attrs.itemsVisible ?? 2, 1), attrs.items.length)
+
+        if (attrs.circular && this.currentIndex + itemsVisible > attrs.items.length) {
+            const tail = attrs.items.slice(this.currentIndex)
+            const head = attrs.items.slice(0, itemsVisible - tail.length)
             return [...tail, ...head]
         }
 
-        if (this.currentIndex >= v.attrs.items.length - itemsVisible) {
-            return v.attrs.items.slice(v.attrs.items.length - itemsVisible, v.attrs.items.length)
+        if (this.currentIndex >= attrs.items.length - itemsVisible) {
+            return attrs.items.slice(attrs.items.length - itemsVisible)
         }
 
-        return v.attrs.items.slice(this.currentIndex, this.currentIndex + itemsVisible)
+        return attrs.items.slice(this.currentIndex, this.currentIndex + itemsVisible)
     }
 }
 

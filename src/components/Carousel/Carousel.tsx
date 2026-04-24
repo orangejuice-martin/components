@@ -3,6 +3,8 @@ import { MithrilTsxComponent } from "mithril-tsx-component"
 import "./Carousel.scss"
 import { Header, type IHeader } from "../../items/header/Header"
 
+const $key = Symbol("key")
+
 export interface ICarousel {
     header?: IHeader
     circular?: boolean
@@ -13,6 +15,7 @@ export interface ICarousel {
 export interface ICarouselItem {
     title: string
     content: m.Children
+    [$key]?: string
 }
 
 export class Carousel extends MithrilTsxComponent<ICarousel> {
@@ -28,17 +31,13 @@ export class Carousel extends MithrilTsxComponent<ICarousel> {
     }
 
     view(v: m.Vnode<ICarousel>) {
-        if (!v.attrs.items || v.attrs.items.length === 0) {
+        if (!v.attrs.items?.length) {
             return
         }
 
         const itemsVisible = Math.min(Math.max(v.attrs.itemsVisible ?? 2, 1), v.attrs.items.length)
 
         const items = this.getVisibleItems(v, itemsVisible);
-
-        if (items.length === 0) {
-            return
-        }
 
         const showNavigation = v.attrs.items.length > itemsVisible
         const disablePrevious = showNavigation && !v.attrs.circular && this.currentIndex === 0
@@ -53,8 +52,13 @@ export class Carousel extends MithrilTsxComponent<ICarousel> {
                 <div className="Carousel-items">
                     {items.map((item) =>
                         <CarouselItem
+                            key={item[$key] ??= crypto.randomUUID()}
                             title={item.title}
                             content={item.content}
+                            // onbeforeremove={async (v: m.VnodeDOM<ICarouselItem>) => {
+                            //     v.dom.classList.add("fade-out")
+                            //     await new Promise((resolve) => setTimeout(resolve, 1000))
+                            // }}
                         />
                     )}
                 </div>

@@ -66,7 +66,7 @@ class App extends MithrilTsxComponent<{}> {
 
 const app = document.getElementById("app")
 if (app) {
-  m.route.prefix = ""
+  m.route.prefix = "#!"
 
   m.route(app, "/", {
     "/": {

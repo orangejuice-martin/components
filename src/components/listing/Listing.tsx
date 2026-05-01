@@ -38,12 +38,10 @@ export class Listing extends MithrilTsxComponent<IListing> {
                         if (entry) entry.count++
                         else valueMap.set(p.value, { active: false, count: 1 })
                     }
-            if (valueMap.size > 0) {
-                const sorted = new Map([...valueMap.entries()].sort(([a], [b]) =>
+            const sorted = new Map([...valueMap.entries()].sort(([a], [b]) =>
                     String(a).localeCompare(String(b), undefined, { numeric: true })
                 ))
                 this.filterState.set(property, sorted)
-            }
         }
     }
 
@@ -54,8 +52,8 @@ export class Listing extends MithrilTsxComponent<IListing> {
     }
 
     private handleValueClick(property: ListingProperties, value: string | number) {
-        const entry = this.filterState.get(property)?.get(value)
-        if (entry) entry.active = !entry.active
+        const entry = this.filterState.get(property)!.get(value)!
+        entry.active = !entry.active
     }
 
     private isFiltering(): boolean {
@@ -82,7 +80,7 @@ export class Listing extends MithrilTsxComponent<IListing> {
 
         if (this.isFiltering()) {
             items = items.filter(item =>
-                item.properties.some(p => this.filterState.get(p.property)?.get(p.value)?.active)
+                item.properties.some(p => this.filterState.get(p.property)!.get(p.value)!.active)
             )
         }
 
@@ -90,8 +88,8 @@ export class Listing extends MithrilTsxComponent<IListing> {
             {v.attrs.header && <Header title={v.attrs.header.title} heading={v.attrs.header.heading} />}
             <div className="Filter">
                 {LISTING_PROPERTIES.map((property) => {
-                    const valueMap = this.filterState.get(property)
-                    if (!valueMap) return null
+                    const valueMap = this.filterState.get(property)!
+                    if (!valueMap.size) return null
                     const entries = [...valueMap.entries()]
                     const activeCount = entries.filter(([, e]) => e.active).length
                     const allSelected = activeCount === entries.length

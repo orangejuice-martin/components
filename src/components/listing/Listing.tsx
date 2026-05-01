@@ -22,41 +22,55 @@ export interface IListingItem {
     properties: ListingProperty[]
 }
 
-export class Listing extends MithrilTsxComponent<IListing> {
-    private selectedValues = new Map<ListingProperties, Set<string | number>>()
+type FilterEntry = { active: boolean; count: number }
 
-    private getValuesForProperty(items: IListingItem[], property: ListingProperties): (string | number)[] {
-        const values = new Set<string | number>()
-        for (const item of items)
-            for (const p of item.properties)
-                if (p.property === property)
-                    values.add(p.value)
-        return [...values].sort((a, b) => String(a).localeCompare(String(b), undefined, { numeric: true }))
+export class Listing extends MithrilTsxComponent<IListing> {
+    private filterState = new Map<ListingProperties, Map<string | number, FilterEntry>>()
+
+    private buildFilterState(items: IListingItem[]) {
+        this.filterState.clear()
+        for (const property of LISTING_PROPERTIES) {
+            const valueMap = new Map<string | number, FilterEntry>()
+            for (const item of items)
+                for (const p of item.properties)
+                    if (p.property === property) {
+                        const entry = valueMap.get(p.value)
+                        if (entry) entry.count++
+                        else valueMap.set(p.value, { active: false, count: 1 })
+                    }
+            if (valueMap.size > 0) {
+                const sorted = new Map([...valueMap.entries()].sort(([a], [b]) =>
+                    String(a).localeCompare(String(b), undefined, { numeric: true })
+                ))
+                this.filterState.set(property, sorted)
+            }
+        }
     }
 
-    private handlePropertyClick(items: IListingItem[], property: ListingProperties) {
-        if (this.selectedValues.get(property))
-            this.selectedValues.delete(property)
-        else
-            this.selectedValues.set(property, new Set(this.getValuesForProperty(items, property)))
+    private handlePropertyClick(property: ListingProperties) {
+        const valueMap = this.filterState.get(property)!
+        const anyActive = [...valueMap.values()].some(e => e.active)
+        for (const entry of valueMap.values()) entry.active = !anyActive
     }
 
     private handleValueClick(property: ListingProperties, value: string | number) {
-        if (!this.selectedValues.has(property)) {
-            this.selectedValues.set(property, new Set([value]))
-            return
-        }
-        const selected = this.selectedValues.get(property)!
-        if (selected.has(value))
-            selected.delete(value)
-        else
-            selected.add(value)
-
-        if (selected.size === 0)
-            this.selectedValues.delete(property)
+        const entry = this.filterState.get(property)?.get(value)
+        if (entry) entry.active = !entry.active
     }
 
-    onbeforeupdate(v: m.Vnode<IListing>) {
+    private isFiltering(): boolean {
+        return [...this.filterState.values()].some(valueMap =>
+            [...valueMap.values()].some(e => e.active)
+        )
+    }
+
+    oninit(v: m.Vnode<IListing>) {
+        this.buildFilterState(v.attrs.items ?? [])
+    }
+
+    onbeforeupdate(v: m.Vnode<IListing>, old: m.Vnode<IListing>) {
+        if (v.attrs.items !== old.attrs.items)
+            this.buildFilterState(v.attrs.items ?? [])
     }
 
     view(v: m.Vnode<IListing>) {
@@ -64,15 +78,11 @@ export class Listing extends MithrilTsxComponent<IListing> {
             return
         }
 
-        const allItems = v.attrs.items
+        var items = v.attrs.items
 
-        var items = allItems
-
-        if (this.selectedValues.size > 0) {
+        if (this.isFiltering()) {
             items = items.filter(item =>
-                [...this.selectedValues.entries()].some(([prop, vals]) =>
-                    item.properties.some(p => p.property === prop && vals.has(p.value))
-                )
+                item.properties.some(p => this.filterState.get(p.property)?.get(p.value)?.active)
             )
         }
 
@@ -80,31 +90,31 @@ export class Listing extends MithrilTsxComponent<IListing> {
             {v.attrs.header && <Header title={v.attrs.header.title} heading={v.attrs.header.heading} />}
             <div className="Filter">
                 {LISTING_PROPERTIES.map((property) => {
-                    const allValues = this.getValuesForProperty(allItems, property)
-                    if (allValues.length === 0) return null
-                    const selected = this.selectedValues.get(property)
-                    const selectedCount = selected?.size ?? 0
-                    const allSelected = selectedCount === allValues.length
-                    const someSelected = selectedCount > 0 && !allSelected
+                    const valueMap = this.filterState.get(property)
+                    if (!valueMap) return null
+                    const entries = [...valueMap.entries()]
+                    const activeCount = entries.filter(([, e]) => e.active).length
+                    const allSelected = activeCount === entries.length
+                    const someSelected = activeCount > 0 && !allSelected
                     return <div className="Filter-group">
                         <label className="Filter-option Filter-option--property">
                             <input
                                 type="checkbox"
                                 checked={allSelected}
                                 indeterminate={someSelected}
-                                onchange={() => this.handlePropertyClick(allItems, property)}
+                                onchange={() => this.handlePropertyClick(property)}
                             />
                             {property}
                         </label>
                         <div className="Filter-values">
-                            {allValues.map(value => (
+                            {entries.map(([value, entry]) => (
                                 <label className="Filter-option Filter-option--value">
                                     <input
                                         type="checkbox"
-                                        checked={selected?.has(value) ?? false}
+                                        checked={entry.active}
                                         onchange={() => this.handleValueClick(property, value)}
                                     />
-                                    {value}
+                                    {value} ({entry.count})
                                 </label>
                             ))}
                         </div>

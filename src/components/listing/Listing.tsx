@@ -8,7 +8,8 @@ export interface IListing {
     items: IListingItem[]
 }
 
-export type ListingProperties = "Size" | "Color" | "Weight"
+export const LISTING_PROPERTIES = ["Size", "Color", "Weight"] as const
+export type ListingProperties = typeof LISTING_PROPERTIES[number]
 
 export type ListingProperty =
     | { property: "Size"; value: string }
@@ -50,7 +51,7 @@ export class Listing extends MithrilTsxComponent<IListing> {
         return <div className="Listing">
             {v.attrs.header && <Header title={v.attrs.header.title} heading={v.attrs.header.heading} />}
             <div className="Filter">
-                {(["Size", "Color", "Weight"] as ListingProperties[]).map((property) => (
+                {LISTING_PROPERTIES.map((property) => (
                     <label className="Filter-option">
                         <input
                             type="checkbox"

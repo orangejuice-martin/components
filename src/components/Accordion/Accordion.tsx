@@ -48,7 +48,7 @@ export class Accordion extends MithrilTsxComponent<IAccordion> {
    }
 
    view(v: m.Vnode<IAccordion>) {
-      if (!v.attrs.items || v.attrs.items.length === 0) {
+      if (!v.attrs.items?.length) {
          return
       }
 

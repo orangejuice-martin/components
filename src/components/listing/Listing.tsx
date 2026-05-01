@@ -2,23 +2,23 @@ import m from "mithril"
 import { MithrilTsxComponent } from "mithril-tsx-component"
 import "./Listing.scss"
 import { Header, type IHeader } from "../../items/header/Header"
-import type { IAccordionItem } from "../accordion/Accordion"
 
 export interface IListing {
     header?: IHeader
     items: IListingItem[]
 }
 
-export enum ListingProperties {
-    Size = "Size",
-    Color = "Color",
-    Weight = "Weight"
-}
+export type ListingProperties = "Size" | "Color" | "Weight"
+
+export type ListingProperty =
+    | { property: "Size"; value: string }
+    | { property: "Color"; value: string }
+    | { property: "Weight"; value: number }
 
 export interface IListingItem {
     title: string
     content: m.Children
-    properties: { [key in ListingProperties]?: string | number | boolean }
+    properties: ListingProperty[]
 }
 
 export class Listing extends MithrilTsxComponent<IListing> {
@@ -35,7 +35,7 @@ export class Listing extends MithrilTsxComponent<IListing> {
     }
 
     view(v: m.Vnode<IListing>) {
-        if (!v.attrs.items || v.attrs.items.length === 0) {
+        if (!v.attrs.items?.length) {
             return
         }
 
@@ -43,14 +43,14 @@ export class Listing extends MithrilTsxComponent<IListing> {
 
         if (this.selectedProperties.size > 0) {
             items = items.filter(item =>
-                Object.keys(item.properties).some(key => this.selectedProperties.has(key as ListingProperties))
+                item.properties.some(p => this.selectedProperties.has(p.property))
             )
         }
 
         return <div className="Listing">
             {v.attrs.header && <Header title={v.attrs.header.title} heading={v.attrs.header.heading} />}
             <div className="Filter">
-                {Object.values(ListingProperties).map((property) => (
+                {(["Size", "Color", "Weight"] as ListingProperties[]).map((property) => (
                     <label className="Filter-option">
                         <input
                             type="checkbox"
@@ -82,12 +82,12 @@ class ListingItem extends MithrilTsxComponent<IListingItem> {
                 {v.attrs.title}
             </div>
             <div className="content">{v.attrs.content}</div>
-            {v.attrs.properties && Object.keys(v.attrs.properties).length > 0 && (
+            {v.attrs.properties?.length > 0 && (
                 <div className="properties">
-                    {Object.entries(v.attrs.properties).map(([key, value]) => (
+                    {v.attrs.properties.map(p => (
                         <div className="property">
-                            <span className="property-key">{key}:</span>
-                            <span className="property-value">{value}</span>
+                            <span className="property-key">{p.property}:</span>
+                            <span className="property-value">{p.value}</span>
                         </div>
                     ))}
                 </div>

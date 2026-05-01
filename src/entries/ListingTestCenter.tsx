@@ -18,13 +18,13 @@ export class ListingTestCenter extends MithrilTsxComponent<{}> {
         { title: "Third Item",   content: "This is the third item content",   properties: [{ property: "Color", value: "Blue" }, { property: "Size", value: "Medium" }] },
         { title: "Fourth Item",  content: "This is the fourth item content",  properties: [{ property: "Color", value: "Green" }, { property: "Size", value: "Large" }, { property: "Weight", value: 1 }] },
         { title: "Fifth Item",   content: "This is the fifth item content",   properties: [] },
-        { title: "Sixth Item",   content: "This is the sixth item content",   properties: [{ property: "Color", value: "Yellow" }] },
-        { title: "Seventh Item", content: "This is the seventh item content", properties: [{ property: "Color", value: "Purple" }, { property: "Size", value: "Small" }] },
-        { title: "Eighth Item",  content: "This is the eighth item content",  properties: [{ property: "Color", value: "Orange" }, { property: "Size", value: "XL" }, { property: "Weight", value: 2 }] },
+        { title: "Sixth Item",   content: "This is the sixth item content",   properties: [{ property: "Color", value: "Red" }] },
+        { title: "Seventh Item", content: "This is the seventh item content", properties: [{ property: "Color", value: "Blue" }, { property: "Size", value: "Small" }] },
+        { title: "Eighth Item",  content: "This is the eighth item content",  properties: [{ property: "Color", value: "Orange" }, { property: "Size", value: "Large" }, { property: "Weight", value: 2 }] },
         { title: "Ninth Item",   content: "This is the ninth item content",   properties: [] },
         { title: "Tenth Item",   content: "This is the tenth item content",   properties: [{ property: "Color", value: "Black" }] },
-        { title: "Eleventh Item",content: "This is the eleventh item content",properties: [{ property: "Color", value: "White" }, { property: "Size", value: "S" }] },
-        { title: "Twelfth Item", content: "This is the twelfth item content", properties: [{ property: "Color", value: "Pink" }, { property: "Size", value: "XXL" }, { property: "Weight", value: 0.5 }] },
+        { title: "Eleventh Item",content: "This is the eleventh item content",properties: [{ property: "Color", value: "Blue" }, { property: "Size", value: "Small" }] },
+        { title: "Twelfth Item", content: "This is the twelfth item content", properties: [{ property: "Color", value: "Red" }, { property: "Size", value: "Large" }, { property: "Weight", value: 0.5 }] },
       ]
     }
 
